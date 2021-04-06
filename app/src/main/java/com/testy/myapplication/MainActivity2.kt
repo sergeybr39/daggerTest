@@ -68,7 +68,7 @@ class MainActivity2 : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, UserFragment())
+                .replace(R.id.container, MainFragment())
                 .commitNow()
         }
     }

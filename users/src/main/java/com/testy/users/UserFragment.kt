@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.testy.di_core.ComponentProvider
 import com.testy.di_core.DepTest
 import com.testy.di_core.DepsModule
+import com.testy.users.di.Blob
 import com.testy.users.di.UserComponent
 import com.testy.users.di.UserDeps
 import javax.inject.Inject
@@ -24,6 +25,9 @@ class UserFragment : Fragment() {
 
     @Inject
     lateinit var pojoProvider: IPojoProvider
+
+    @Inject
+    lateinit var blob: Blob
 
     override fun onAttach(context: Context) {
         (requireActivity().applicationContext as ComponentProvider).provide(UserComponent::class.java).inject(this)
@@ -42,7 +46,7 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val tv = view.findViewById<TextView>(R.id.tv_test)
-        tv.text = "${depsTest.show()} ${pojoProvider.providePojo().name}"
+        tv.text = "${depsTest.show()} ${pojoProvider.providePojo().name}::: ${blob.i}"
 
     }
 }

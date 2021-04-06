@@ -6,6 +6,6 @@ import dagger.Component
 
 @Component(modules = [UserDependenciesModule::class, CompModule::class])
 interface AppComponent {
-    fun userComponent():UserComponent.Factory
+
     fun comp(): MutableMap<Class<out ComponentInterface>, ComponentInterface>
 }

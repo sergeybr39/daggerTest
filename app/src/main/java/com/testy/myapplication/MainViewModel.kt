@@ -14,15 +14,7 @@ class MainViewModel :ViewModel(){
     val tickFlow: SharedFlow<Int> = _tickFlow
 
     init {
-        viewModelScope.launch {
-            var count = 0
 
-            while(true) {
-
-                _tickFlow.emit(count++)
-                delay(1_000)
-            }
-        }
     }
 
 }
