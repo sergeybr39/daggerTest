@@ -1,52 +1,56 @@
-package com.testy.myapplication.ui.main
+package com.testy.boards.ui.main
 
-import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.lifecycle.addRepeatingJob
-import androidx.lifecycle.lifecycleScope
-import com.testy.boards.BoardActivity
-import com.testy.myapplication.R
-import com.testy.users.UserFragment
+import android.widget.TextView
+import com.testy.boards.R
+import com.testy.boards.di.BoardComponent
+import com.testy.boards.provideComponentTest
+import com.testy.di_core.DepTest
+import com.testy.di_core.provideComponent
+import javax.inject.Inject
 
-class MainFragment : Fragment() {
+class BoardFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = BoardFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var depTest: DepTest
+
+    override fun onAttach(context: Context) {
+        provideComponentTest<BoardComponent>().inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.board_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<TextView>(R.id.message).text = "Boom! ${depTest.show()}"
+
         view.findViewById<Button>(R.id.button).setOnClickListener {
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.container, UserFragment(), "findThisFragment")
+                .replace(R.id.container, DocFragment.instance(22), "findThisFragment")
                 .addToBackStack(null)
                 .commit()
         }
-        view.findViewById<Button>(R.id.button2).setOnClickListener {
-            requireActivity().startActivity(Intent(requireContext(), BoardActivity::class.java))
-        }
     }
-
 }

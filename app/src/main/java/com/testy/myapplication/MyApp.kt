@@ -2,6 +2,7 @@ package com.testy.myapplication
 
 import android.app.Application
 import android.util.Log
+import com.testy.di_core.ComponentFactoryInterface
 import com.testy.di_core.ComponentInterface
 import com.testy.di_core.ComponentProvider
 import com.testy.myapplication.di.AppComponent
@@ -18,7 +19,7 @@ class MyApp : Application(), ComponentProvider {
         appComponent = DaggerAppComponent.create()
     }
 
-    override fun <T : ComponentInterface> provide(com: Class<T>): T {
+    override fun <T : ComponentFactoryInterface> provide(com: Class<T>): T {
         Log.d("TTT","comp: ${appComponent.comp().size}")
         return appComponent.comp()[com] as T
     }

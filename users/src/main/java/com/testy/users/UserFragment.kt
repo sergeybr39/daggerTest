@@ -1,20 +1,16 @@
 package com.testy.users
 
-import android.content.ContentProvider
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.testy.di_core.ComponentProvider
+import androidx.fragment.app.Fragment
 import com.testy.di_core.DepTest
-import com.testy.di_core.DepsModule
-import com.testy.users.di.Blob
+import com.testy.di_core.provideComponent
+import com.testy.di_core.Blob
 import com.testy.users.di.UserComponent
-import com.testy.users.di.UserDeps
 import javax.inject.Inject
 
 class UserFragment : Fragment() {
@@ -30,7 +26,8 @@ class UserFragment : Fragment() {
     lateinit var blob: Blob
 
     override fun onAttach(context: Context) {
-        (requireActivity().applicationContext as ComponentProvider).provide(UserComponent::class.java).inject(this)
+        provideComponent<UserComponent.Factory>().create(UserFragment.instance(55))
+            .inject(this)
 
         super.onAttach(context)
     }
@@ -46,7 +43,18 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val tv = view.findViewById<TextView>(R.id.tv_test)
-        tv.text = "${depsTest.show()} ${pojoProvider.providePojo().name}::: ${blob.i}"
+        tv.text = "${depsTest.show()} ${pojoProvider.providePojo().name} ---${pojoProvider.providePojo().age}----::: ${blob.i}"
 
+    }
+
+    companion object {
+        const val EXTRA_KEY_TEAM_ID = "team_id"
+        fun instance(teamId: Int): UserFragment {
+            return UserFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(EXTRA_KEY_TEAM_ID, teamId)
+                }
+            }
+        }
     }
 }
